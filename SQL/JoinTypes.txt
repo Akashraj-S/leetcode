@@ -1,0 +1,81 @@
+🔥 1. INNER JOIN
+
+👉 Returns only matching records from both tables
+
+df1.join(df2, Seq("id"), "inner")
+
+✔ Use when you need common data only
+
+🔥 2. LEFT JOIN (LEFT OUTER)
+
+👉 All records from left + matching from right
+👉 Non-matching → null
+
+df1.join(df2, Seq("id"), "left")
+
+✔ Most commonly used in pipelines
+
+🔥 3. RIGHT JOIN (RIGHT OUTER)
+
+👉 All records from right + matching from left
+
+df1.join(df2, Seq("id"), "right")
+
+✔ Less common in real-world (usually rewritten as left join)
+
+🔥 4. FULL OUTER JOIN
+
+👉 All records from both sides
+👉 Non-matching → null
+
+df1.join(df2, Seq("id"), "outer")
+
+✔ Used in reconciliation / comparison use cases
+
+🔥 5. LEFT SEMI JOIN
+
+👉 Returns only rows from left that have a match in right
+👉 Does NOT bring columns from right
+
+df1.join(df2, Seq("id"), "left_semi")
+
+✔ Equivalent to EXISTS
+
+🔥 6. LEFT ANTI JOIN ⭐ (Very Important)
+
+👉 Returns rows from left that DO NOT have match in right
+
+df1.join(df2, Seq("id"), "left_anti")
+
+✔ Equivalent to NOT EXISTS / NOT IN
+✔ Highly optimized in Spark
+
+🔥 7. CROSS JOIN (Cartesian)
+
+👉 Every row from left × every row from right
+
+df1.crossJoin(df2)
+
+⚠ Very expensive (n × m rows)
+
+🔥 8. SELF JOIN
+
+👉 Joining a table with itself
+
+val a = df.alias("a")
+val b = df.alias("b")
+
+a.join(b, col("a.managerId") === col("b.id"))
+
+✔ Used for hierarchy (employee-manager)
+
+🚀 Interview Cheat Sheet
+Join Type	Use Case
+INNER	Matching data
+LEFT	Keep all left data
+RIGHT	Rarely used
+FULL OUTER	Data comparison/reconciliation
+LEFT SEMI	Filter (EXISTS)
+LEFT ANTI ⭐	Missing data (NOT EXISTS)
+CROSS	Combinations (rare)
+SELF	Hierarchical data

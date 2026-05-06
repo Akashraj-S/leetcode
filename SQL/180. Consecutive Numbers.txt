@@ -1,5 +1,4 @@
 Table: Logs
-
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -10,7 +9,7 @@ In SQL, id is the primary key for this table.
 id is an autoincrement column starting from 1.
 
 
-Find all numbers that appear at least three times consecutively.
+Find "all numbers that appear at least three times consecutively".
 
 Return the result table in any order.
 
@@ -43,7 +42,8 @@ Explanation: 1 is the only number that appears consecutively for at least three 
 
 Solution:
 ---------
-
+SQL Solution 1:
+===============
 select distinct a as ConsecutiveNums
 from
 (select id, lag(num,2) over ( order by id, num) as a,
@@ -52,12 +52,25 @@ num as c
 from logs) as subquery
 where a=b and b=c
 
+SQL Solution 2:
+===============
+
+with subquery as (select id, lag(num,2) over ( order by id) as a,
+lag(num,1) over ( order by id) as b,
+num as c
+from logs)
+
+select distinct a as ConsecutiveNums from subquery
+where a=b and b=c
+
 =======================================================
 Intuition
 Using window functions, we can look at the previous rows to compare values.
 
 Approach
-We use LAG() to look at the previous two rows for each row and compare the num values. If the current number matches the previous two, we know it's part of a consecutive sequence of at least three numbers.
+We use LAG() to look at the previous two rows for each row and compare the num values.
+If the current number matches the previous two, we know it's part of a consecutive sequence
+of at least three numbers.
 
 Complexity
 Time complexity:
